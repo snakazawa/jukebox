@@ -105,6 +105,7 @@ module.exports = class Speaker extends EventEmitter {
     const keys = ['_stream', '_decoder', '_pcmVolume', '_speaker'];
     keys.forEach((key, i) => {
       if (!this[key]) return;
+      this[key].end();
 
       if (i + 1 < keys.length) {
         const nKey = keys[i + 1];
@@ -113,7 +114,6 @@ module.exports = class Speaker extends EventEmitter {
         }
       }
 
-      this[key].end();
       this[key] = null;
     });
 
