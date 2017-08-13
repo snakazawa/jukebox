@@ -1,7 +1,7 @@
-// const speaker = require('speaker');
+const speaker = require('speaker');
 const { Decoder: decoder } = require('lame');
 const EventEmitter = require('events').EventEmitter;
-// const pcmVolume = require('pcm-volume');
+const pcmVolume = require('pcm-volume');
 const AwaitLock = require('await-lock');
 
 module.exports = class Speaker extends EventEmitter {
@@ -71,35 +71,8 @@ module.exports = class Speaker extends EventEmitter {
   startWithoutLock(stream) {
     this._stream = stream;
     this._decoder = decoder();
-    // this._pcmVolume = pcmVolume();
-    // this._speaker = speaker();;
-    this._pcmVolume = {
-      setVolume() {},
-      write() {},
-      read() {},
-      end() {},
-      format() {},
-      _write() {},
-      _read() {},
-      _format() {},
-      on() {},
-      emit() {},
-      once() {},
-      pipe(dest) {
-        return dest;
-      },
-      unpipe() {}
-    };
-    this._speaker = {
-      write() {},
-      end() {},
-      format() {},
-      _write() {},
-      _format() {},
-      on() {},
-      emit() {},
-      once() {}
-    };
+    this._pcmVolume = pcmVolume();
+    this._speaker = speaker();
 
     this._pcmVolume.setVolume(this.volume);
     this._decoder.on('format', data => {
@@ -136,10 +109,13 @@ module.exports = class Speaker extends EventEmitter {
     const rKeys = keys.slice().reverse();
 
     // end streams in order of opening
-    keys.forEach(key => {
-      if (!this[key]) return;
-      this[key].end();
-    });
+    if (this._stream) {
+      this._stream.end();
+    }
+    // keys.forEach(key => {
+    //   if (!this[key]) return;
+    //   this[key].end();
+    // });
 
     // unpipe streams in reverse order of opening
     rKeys.forEach((key, i) => {
