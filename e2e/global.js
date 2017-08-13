@@ -13,20 +13,31 @@ module.exports = {
     storeHelper.makeStub();
 
     if (E2EHelper.E2E_USE_DUMMY_SPEAKER) {
-      sinon.stub(speaker.prototype, '_open').callsFake(() => {});
-      sinon.stub(speaker.prototype, '_format').callsFake(() => {});
+      console.log('use dummy speaker');
+      sinon.stub(speaker.prototype, '_open').callsFake(() => {
+        console.log('_open');
+      });
+      sinon.stub(speaker.prototype, '_format').callsFake(() => {
+        console.log('_format');
+      });
       sinon.stub(speaker.prototype, '_write').callsFake((chunk, encoding, cb) => {
         cb();
       });
       sinon.stub(speaker.prototype, '_flush').callsFake(function dummyFlush() {
+        console.log('_flush');
         this.emit('flush');
         this.close();
       });
       sinon.stub(speaker.prototype, 'close').callsFake(function dummyClose() {
+        console.log('close');
         this.emit('close');
       });
-      sinon.stub(speaker.prototype, '_pipe').callsFake(() => {});
-      sinon.stub(speaker.prototype, '_unpipe').callsFake(() => {});
+      sinon.stub(speaker.prototype, '_pipe').callsFake(() => {
+        console.log('_pipe');
+      });
+      sinon.stub(speaker.prototype, '_unpipe').callsFake(() => {
+        console.log('_unpipe');
+      });
     }
 
     done();
