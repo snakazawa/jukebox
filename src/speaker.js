@@ -82,17 +82,21 @@ module.exports = class Speaker extends EventEmitter {
     this._stream.on('end', () => console.log('stream: on end'));
     this._stream.on('finish', () => console.log('speaker: on finish'));
     this._stream.on('close', () => console.log('speaker: on close'));
+    this._stream.on('error', err => console.error('error on stream', err));
 
     this._decoder.on('end', () => console.log('decoder: on end'));
     this._decoder.on('finish', () => console.log('decoder: on finish'));
     this._decoder.on('close', () => console.log('decoder: on close'));
+    this._decoder.on('error', err => console.error('error on decoder', err));
 
     this._pcmVolume.on('end', () => console.log('pcmVolume: on end'));
     this._pcmVolume.on('finish', () => console.log('speaker: on finish'));
     this._pcmVolume.on('close', () => console.log('speaker: on close'));
+    this._pcmVolume.on('error', err => console.error('error on pcmVolume', err));
 
     this._speaker.on('finish', () => console.log('speaker: on finish'));
     this._speaker.on('close', () => console.log('speaker: on close'));
+    this._speaker.on('error', err => console.error('error on speaker', err));
 
     this._stream
       .pipe(this._decoder)
@@ -115,8 +119,8 @@ module.exports = class Speaker extends EventEmitter {
 
   stopWithoutLock() {
     if (this._stream && this._pcmVolume) {
-      this._pcmVolume.unpipe(this._speaker);
       this._stream.end();
+      this._pcmVolume.unpipe(this._speaker);
     }
     this.emit('stopped');
   }
