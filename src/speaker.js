@@ -98,7 +98,7 @@ module.exports = class Speaker extends EventEmitter {
 
   stopWithoutLock() {
     if (this._speaker) {
-      this._speaker.removeAllListeners();
+      // this._speaker.removeAllListeners();
     }
 
     const keys = ['_stream', '_decoder', '_pcmVolume', '_speaker'];
