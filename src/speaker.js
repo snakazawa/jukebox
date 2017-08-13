@@ -101,19 +101,28 @@ module.exports = class Speaker extends EventEmitter {
       this._speaker.removeAllListeners();
     }
 
-    // unpipe and close streams in order of opening
     const keys = ['_stream', '_decoder', '_pcmVolume', '_speaker'];
-    keys.forEach((key, i) => {
+    const rKeys = keys.slice().reverse();
+
+    // end streams in order of opening
+    keys.forEach(key => {
       if (!this[key]) return;
       this[key].end();
+    });
 
-      if (i + 1 < keys.length) {
-        const nKey = keys[i + 1];
-        if (this[nKey]) {
-          this[key].unpipe(this[nKey]);
-        }
-      }
+    // unpipe streams in reverse order of opening
+    rKeys.forEach((key, i) => {
+      if (!this[key]) return;
+      if (i - 1 < 0) return;
+      const nKey = rKeys[i - 1];
+      if (!this[nKey]) return;
+      console.log(`${key}.unpipe(${nKey})`);
+      this[key].unpipe(this[nKey]);
+    });
 
+    // delete streams
+    keys.forEach(key => {
+      if (!this[key]) return;
       this[key] = null;
     });
 
