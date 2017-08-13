@@ -1,7 +1,7 @@
 // const speaker = require('speaker');
-const { Decoder: decoder } = require('lame');
+// const { Decoder: decoder } = require('lame');
 const EventEmitter = require('events').EventEmitter;
-const pcmVolume = require('pcm-volume');
+// const pcmVolume = require('pcm-volume');
 const AwaitLock = require('await-lock');
 
 module.exports = class Speaker extends EventEmitter {
@@ -70,9 +70,42 @@ module.exports = class Speaker extends EventEmitter {
 
   startWithoutLock(stream) {
     this._stream = stream;
-    this._decoder = decoder();
-    this._pcmVolume = pcmVolume();
+    // this._decoder = decoder();
+    // this._pcmVolume = pcmVolume();
     // this._speaker = speaker();
+    this._decoder = {
+      write() {},
+      read() {},
+      end() {},
+      format() {},
+      _write() {},
+      _read() {},
+      _format() {},
+      on() {},
+      emit() {},
+      once() {},
+      pipe(dest) {
+        return dest;
+      },
+      unpipe() {}
+    };
+    this._pcmVolume = {
+      setVolume() {},
+      write() {},
+      read() {},
+      end() {},
+      format() {},
+      _write() {},
+      _read() {},
+      _format() {},
+      on() {},
+      emit() {},
+      once() {},
+      pipe(dest) {
+        return dest;
+      },
+      unpipe() {}
+    };
     this._speaker = {
       write() {},
       end() {},
