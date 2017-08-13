@@ -75,7 +75,11 @@ module.exports = class Speaker extends EventEmitter {
     this._speaker = speaker();
 
     this._pcmVolume.setVolume(this.volume);
-    this._decoder.on('format', data => this._speaker._format(data));
+    this._decoder.on('format', data => {
+      console.log('call format on decoder format event');
+      this._speaker._format(data);
+      console.log('success: call format on decoder format event');
+    });
 
     this._stream
       .pipe(this._decoder)
