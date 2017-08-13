@@ -62,6 +62,15 @@ module.exports = {
 
     const audio = ytdl(link, opts);
     const ffmpeg = new FFmpeg(audio);
-    return ffmpeg.format('mp3').pipe();
+    const cmd = ffmpeg.format('mp3');
+    const stream = cmd.pipe();
+    cmd.on('error', err => {
+      if (/was killed/.test(err.message)) return;
+      console.error('error on ffmpeg cmd for youtube', err);
+    });
+    stream.on('end', () => {
+      cmd.kill();
+    });
+    return stream;
   }
 };
