@@ -1,4 +1,4 @@
-const speaker = require('speaker');
+// const speaker = require('speaker');
 const { Decoder: decoder } = require('lame');
 const EventEmitter = require('events').EventEmitter;
 const pcmVolume = require('pcm-volume');
@@ -72,7 +72,17 @@ module.exports = class Speaker extends EventEmitter {
     this._stream = stream;
     this._decoder = decoder();
     this._pcmVolume = pcmVolume();
-    this._speaker = speaker();
+    // this._speaker = speaker();
+    this._speaker = {
+      write() {},
+      end() {},
+      format() {},
+      _write() {},
+      _format() {},
+      on() {},
+      emit() {},
+      once() {}
+    };
 
     this._pcmVolume.setVolume(this.volume);
     this._decoder.on('format', data => {
