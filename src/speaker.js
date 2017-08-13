@@ -76,10 +76,23 @@ module.exports = class Speaker extends EventEmitter {
 
     this._pcmVolume.setVolume(this.volume);
     this._decoder.on('format', data => {
-      console.log('call format on decoder format event');
       this._speaker._format(data);
-      console.log('success: call format on decoder format event');
     });
+
+    this._stream.on('end', () => console.log('stream: on end'));
+    this._stream.on('finish', () => console.log('speaker: on finish'));
+    this._stream.on('close', () => console.log('speaker: on finish'));
+
+    this._decoder.on('end', () => console.log('decoder: on end'));
+    this._decoder.on('finish', () => console.log('decoder: on finish'));
+    this._decoder.on('close', () => console.log('decoder: on finish'));
+
+    this._pcmVolume.on('end', () => console.log('pcmVolume: on end'));
+    this._pcmVolume.on('finish', () => console.log('speaker: on finish'));
+    this._pcmVolume.on('close', () => console.log('speaker: on finish'));
+
+    this._speaker.on('finish', () => console.log('speaker: on finish'));
+    this._speaker.on('close', () => console.log('speaker: on finish'));
 
     this._stream
       .pipe(this._decoder)
@@ -101,21 +114,8 @@ module.exports = class Speaker extends EventEmitter {
   }
 
   stopWithoutLock() {
-    if (this._speaker) {
-      // this._speaker.removeAllListeners();
-    }
-
     const keys = ['_stream', '_decoder', '_pcmVolume', '_speaker'];
     const rKeys = keys.slice().reverse();
-
-    // end streams in order of opening
-    if (this._stream) {
-      this._stream.end();
-    }
-    // keys.forEach(key => {
-    //   if (!this[key]) return;
-    //   this[key].end();
-    // });
 
     // unpipe streams in reverse order of opening
     rKeys.forEach((key, i) => {
@@ -125,6 +125,12 @@ module.exports = class Speaker extends EventEmitter {
       if (!this[nKey]) return;
       console.log(`${key}.unpipe(${nKey})`);
       this[key].unpipe(this[nKey]);
+    });
+
+    // end streams in order of opening
+    keys.forEach(key => {
+      if (!this[key]) return;
+      this[key].end();
     });
 
     // delete streams
