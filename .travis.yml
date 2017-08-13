@@ -19,4 +19,4 @@ before_install:
 script:
   - yarn run lint:all
   # - yarn run test:all # hasn't test
-  - yarn run e2e -- -e chrome-headless
+  - E2E_USE_DUMMY_SPEAKER=1 yarn run e2e -- -e chrome-headless
