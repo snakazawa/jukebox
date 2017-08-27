@@ -7,10 +7,11 @@ addons:
   apt:
     sources:
       - trusty-media
+      - google-chrome
     packages:
       - ffmpeg
       - libasound2-dev
-  chrome: beta
+      - google-chrome-stable
 
 cache: yarn
 
