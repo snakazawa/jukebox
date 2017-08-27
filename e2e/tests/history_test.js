@@ -1,4 +1,5 @@
 /* eslint-disable func-names */
+const path = require('path');
 
 const {
   sampleUrls,
@@ -16,6 +17,9 @@ module.exports = {
   },
 
   'Set playlist loop mode': browser => {
+    browser.saveScreenshot(path.join(__dirname, 'ss1.png'), res => {
+      console.log(res);
+    });
     browser.page
       .index()
       .click('@noLoopButton')
