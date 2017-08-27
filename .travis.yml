@@ -10,8 +10,7 @@ addons:
     packages:
       - ffmpeg
       - libasound2-dev
-  chrome:
-    - beta
+  chrome: beta
 
 cache: yarn
 
