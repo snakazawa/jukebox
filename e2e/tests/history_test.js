@@ -20,6 +20,17 @@ module.exports = {
     browser.saveScreenshot(path.join(__dirname, 'ss1.png'), res => {
       console.log(res);
     });
+    browser.getLogTypes(types => {
+      types.forEach(type => {
+        browser.getLog(type, logs => {
+          console.log(`Log type: ${type}`);
+          console.log(`Log length: ${logs.length}`);
+          logs.forEach(log => {
+            console.log(`  [${log.level}] ${log.timestamp} : ${log.message}`);
+          });
+        });
+      });
+    });
     browser.page
       .index()
       .click('@noLoopButton')
